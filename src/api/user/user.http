@@ -1,0 +1,12 @@
+@HOST = http://localhost:4000/api
+
+###
+
+PUT {{HOST}}/user/197
+Content-Type: application/json
+
+{
+  "name": "test edit"
+}
+
+###

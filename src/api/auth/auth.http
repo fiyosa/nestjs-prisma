@@ -1,0 +1,54 @@
+@HOST = http://localhost:4000/api
+
+###
+
+GET  {{HOST}}/auth/hash
+Content-Type: application/json
+
+{
+  "data": "136",
+  "check": "1"
+}
+
+###
+
+POST {{HOST}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test",
+  "name": "test"
+}
+
+###
+
+POST {{HOST}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test updated"
+}
+
+###
+
+DELETE  {{HOST}}/auth/logout
+Authorization: Bearer test
+
+###
+
+POST {{HOST}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test updated"
+}
+
+###
+
+GET {{HOST}}/auth/user
+Authorization: Bearer test
+
+###

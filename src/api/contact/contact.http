@@ -1,0 +1,44 @@
+@HOST = http://localhost:4000/api
+@TOKEN = test
+
+###
+
+GET {{HOST}}/contact/qd80kJ7o41
+Authorization: Bearer {{TOKEN}}
+
+###
+
+POST {{HOST}}/contact
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "user_id": "15NovVBobv",
+  "first_name": "test"
+}
+
+###
+
+PUT  {{HOST}}/contact/qd80kJ7o41
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "first_name": "test321",
+  "last_name": "test321",
+  "email": "test321@gmail.com",
+  "phone": "0819371001"
+}
+
+###
+
+GET   {{HOST}}/contact
+      ?page=1
+      &limit=10
+      # &name=wrong
+      &email=es
+      # &limit=
+Authorization: Bearer {{TOKEN}}
+
+
+###

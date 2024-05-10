@@ -30,6 +30,8 @@
 
 ```bash
 $ yarn install
+$ yarn add @prisma/client zod nest-winston winston bcrypt uuid @nestjs/config @nestjs/swagger hashids
+$ yarn add -D prisma @types/bcrypt @types/uuid
 ```
 
 ## Running the app
@@ -39,10 +41,10 @@ $ yarn install
 $ yarn run start
 
 # watch mode
-$ yarn run start:dev
+$ yarn run dev
 
 # production mode
-$ yarn run start:prod
+$ yarn run start
 ```
 
 ## Test

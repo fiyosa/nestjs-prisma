@@ -1,0 +1,48 @@
+@HOST = http://localhost:4000/api
+@TOKEN = test
+
+###
+
+GET {{HOST}}/address?contact_id=EOgoAaNojR
+Authorization: Bearer {{TOKEN}}
+
+###
+
+GET {{HOST}}/address/EMVonmlRAr
+Authorization: Bearer {{TOKEN}}
+
+###
+  
+POST {{HOST}}/address
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "contact_id": "A62ljO6oGJ",
+  "street": "street test",
+  # "city": "city test",
+  # "province": "province test",
+  "country": "country test",
+  "postal_code": "postal_code test"
+}
+
+###
+  
+PUT {{HOST}}/address/MNy9bRR9OK
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "street": "street test",
+  "city": "city test",
+  "province": "province test",
+  "country": "country test",
+  "postal_code": "postal_code test"
+}
+
+###
+  
+DELETE {{HOST}}/address/gE8lQGL0ny
+Authorization: Bearer {{TOKEN}}
+
+###
