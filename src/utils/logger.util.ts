@@ -2,14 +2,11 @@ import { Inject, Injectable } from '@nestjs/common'
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston'
 import { WinstonModule } from 'nest-winston'
 import * as winston from 'winston'
-import { Secret } from '../config/secret'
+import { secret } from '../config/secret'
 
 @Injectable()
 export class LoggerUtil {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private logger: winston.Logger,
-    private readonly secret: Secret
-  ) {}
+  constructor(@Inject(WINSTON_MODULE_PROVIDER) private logger: winston.Logger) {}
 
   public static SETUP = WinstonModule.forRoot({
     transports: [
@@ -31,14 +28,14 @@ export class LoggerUtil {
   })
 
   info(msg: string): void {
-    if (this.secret.env.NODE_ENV === 'development' || this.secret.env.NODE_ENV === 'test') this.logger.info(msg)
+    if (secret.NODE_ENV === 'development') this.logger.info(msg)
   }
 
   warn(msg: string): void {
-    if (this.secret.env.NODE_ENV === 'development' || this.secret.env.NODE_ENV === 'test') this.logger.warn(msg)
+    if (secret.NODE_ENV === 'development') this.logger.warn(msg)
   }
 
   error(msg: string): void {
-    if (this.secret.env.NODE_ENV === 'development' || this.secret.env.NODE_ENV === 'test') this.logger.error(msg)
+    if (secret.NODE_ENV === 'development') this.logger.error(msg)
   }
 }

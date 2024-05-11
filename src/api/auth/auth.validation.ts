@@ -1,14 +1,14 @@
-import { ZodType, z } from 'zod'
+import { ZodType, zod } from '../../config/zod'
 
 export class AuthValidation {
-  public static readonly REGISTER: ZodType = z.object({
-    username: z.string().min(1).max(100),
-    password: z.string().min(1).max(100),
-    name: z.string().min(1).max(100),
+  public readonly REGISTER: ZodType = zod.object({
+    username: zod.string().min(1).max(100),
+    password: zod.string().min(1).max(100),
+    name: zod.string().min(1).max(100),
   })
 
-  public static readonly LOGIN: ZodType = z.object({
-    username: z.string().min(1).max(100),
-    password: z.string().min(1).max(100),
+  public static readonly LOGIN: ZodType = zod.object({
+    username: zod.string().min(1).max(100),
+    password: zod.string().min(1).max(100),
   })
 }

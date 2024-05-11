@@ -35,6 +35,7 @@ describe('Auth Controller', () => {
       expect(res.status).toBe(200)
       expect(res.body.data.username).toBe('test')
       expect(res.body.data.name).toBe('test')
+      expect(res.body.message).toBeDefined()
     })
   })
 })

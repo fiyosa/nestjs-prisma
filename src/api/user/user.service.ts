@@ -32,8 +32,6 @@ export class UserService {
       data: user,
     })
 
-    this.logger.info(`User Update -> ${this.helper.objToStr(user)} . ${this.helper.objToStr(req)}`)
-
     return {
       id: this.hash.encode(result.id.toString()),
       username: result.username,

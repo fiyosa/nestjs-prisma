@@ -1,13 +1,12 @@
-import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-@Injectable()
-export class Secret {
-  constructor(private readonly configService: ConfigService) {}
+const configService = new ConfigService()
 
-  public env = {
-    NODE_ENV: this.configService.get<string>('NODE_ENV', 'development'),
-    APP_PORT: this.configService.get<string>('APP_PORT', '4000'),
-    APP_SECRET: this.configService.get<string>('APP_SECRET', 'nestjs-prisma'),
-  }
+const secret = {
+  NODE_ENV: configService.get<string>('NODE_ENV', 'development'),
+  APP_PORT: configService.get<string>('APP_PORT', '4000'),
+  APP_SECRET: configService.get<string>('APP_SECRET', 'nestjs-prisma'),
+  APP_LOCALE: configService.get<string>('APP_LOCALE', 'id'),
 }
+
+export { secret }

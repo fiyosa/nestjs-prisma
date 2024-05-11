@@ -7,6 +7,7 @@ import { WebResModel } from '../../models/web.model'
 import { AddressShowResModel } from '../../models/address/address.show.model'
 import { AddressUpdateResModel } from '../../models/address/address.update.model'
 import { AddressIndexQueryModel, AddressIndexResModel } from '../../models/address/address.index.model'
+import { __ } from '../../lang/lang'
 
 @Controller('address')
 export class AddressController {
@@ -19,7 +20,7 @@ export class AddressController {
     @Query() query: AddressIndexQueryModel
   ): Promise<WebResModel<AddressIndexResModel[]>> {
     const result = await this.addressService.index(query)
-    return { data: result, message: 'Address retrieved successfully' }
+    return { data: result, message: __('retrieved_successfully', { operator: __('address') }) }
   }
 
   @Get('/:address_id')
@@ -29,14 +30,14 @@ export class AddressController {
     @ParamID('address_id', ParseIntPipe) address_id: number
   ): Promise<WebResModel<AddressShowResModel>> {
     const result = await this.addressService.show(address_id)
-    return { data: result, message: 'Address retrieved successfully' }
+    return { data: result, message: __('retrieved_successfully', { operator: __('address') }) }
   }
 
   @Post()
   @HttpCode(200)
   async create(@Auth() user: User, @Body() req: AddressCreateReqModel): Promise<WebResModel<AddressCreateResModel>> {
     const result = await this.addressService.create(req)
-    return { data: result, message: 'Address saved successfully' }
+    return { data: result, message: __('saved_successfully', { operator: __('address') }) }
   }
 
   @Put('/:address_id')
@@ -47,7 +48,7 @@ export class AddressController {
     @Body() req: AddressUpdateResModel
   ): Promise<WebResModel<AddressUpdateResModel>> {
     const result = await this.addressService.update(address_id, req)
-    return { data: result, message: 'Address updated successfully' }
+    return { data: result, message: __('updated_successfully', { operator: __('address') }) }
   }
 
   @Delete('/:address_id')
@@ -57,6 +58,6 @@ export class AddressController {
     @ParamID('address_id', ParseIntPipe) address_id: number
   ): Promise<WebResModel<string>> {
     await this.addressService.delete(address_id)
-    return { message: 'Address deleted successfully' }
+    return { message: __('deleted_successfully', { operator: __('address') }) }
   }
 }

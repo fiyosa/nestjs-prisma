@@ -1,8 +1,8 @@
-import { ZodType, z } from 'zod'
+import { ZodType, zod } from '../../config/zod'
 
 export class UserValidation {
-  public static readonly UPDATE: ZodType = z.object({
-    password: z.string().min(1).max(100).optional(),
-    name: z.string().min(1).max(100).optional(),
+  public static readonly UPDATE: ZodType = zod.object({
+    password: zod.string().min(1).max(100).optional(),
+    name: zod.string().min(1).max(100).optional(),
   })
 }

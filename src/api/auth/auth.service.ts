@@ -18,6 +18,7 @@ export class AuthService {
     private readonly helper: HelperUtil,
     private readonly logger: LoggerUtil,
     private readonly validation: ValidationUtil,
+    private readonly authValidation: AuthValidation,
     private readonly db: DB,
     private readonly hash: HashUtil,
     private readonly uuid: UuidUtil
@@ -25,7 +26,7 @@ export class AuthService {
 
   async register(req: RegisterReqModel): Promise<RegisterResModel> {
     try {
-      const validated: RegisterReqModel = this.validation.validate(AuthValidation.REGISTER, req)
+      const validated: RegisterReqModel = this.validation.validate(this.authValidation.REGISTER, req)
 
       const userCount = await this.db.user.count({
         where: { username: validated.username },
@@ -39,8 +40,6 @@ export class AuthService {
       const user = await this.db.user.create({
         data: validated,
       })
-
-      this.logger.info(`Register -> ${this.helper.objToStr(user)}`)
 
       return {
         username: user.username,

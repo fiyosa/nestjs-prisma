@@ -7,6 +7,8 @@ import { UserResModel } from '../../models/auth/user.model'
 import { User } from '@prisma/client'
 import { Auth } from '../../config/middleware'
 import { LogoutResModel } from '../../models/auth/logout.model'
+import { secret } from '../../config/secret'
+import { __ } from '../../lang/lang'
 
 @Controller('/auth')
 export class AuthController {
@@ -16,14 +18,14 @@ export class AuthController {
   @HttpCode(200)
   async register(@Body() req: RegisterReqModel): Promise<WebResModel<RegisterResModel>> {
     const result = await this.authService.register(req)
-    return { data: result, message: 'User saved successfully' }
+    return { data: result, message: __('saved_successfully', { operator: __('user') }) }
   }
 
   @Post('/login')
   @HttpCode(200)
-  async login(@Body() req: LoginReqModel): Promise<WebResModel<LoginResModel>> {
+  async login(@Body() req: LoginReqModel): Promise<LoginResModel> {
     const result = await this.authService.login(req)
-    return { data: result }
+    return result
   }
 
   @Delete('/logout')
@@ -37,13 +39,14 @@ export class AuthController {
   @HttpCode(200)
   async show(@Auth() user: User): Promise<WebResModel<UserResModel>> {
     const result = await this.authService.user(user)
-    return { data: result }
+    return { data: result, message: __('retrieved_successfully', { operator: __('user') }) }
   }
 
   @Get('/hash')
   @HttpCode(200)
   async crypto(@Body() req: { data: string; check: string }): Promise<WebResModel<any>> {
-    const result = await this.authService.crypto(req.data, req.check)
-    return { data: result, message: 'Hash retrieved successfully' }
+    await this.authService.crypto(req.data, req.check)
+    // return { data: result, message: __('retrieved_successfully', { operator: 'Hash' }) }
+    return { data: secret, message: __('retrieved_successfully', { operator: 'Hash' }) }
   }
 }

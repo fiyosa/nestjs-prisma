@@ -1,11 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
-import { Secret } from '../config/secret'
-// import { LangModel } from '../lang/lang.model'
 
 @Injectable()
 export class HelperUtil {
-  constructor(private readonly secret: Secret) {}
-
   public exception(err: any, statusCode?: HttpStatus) {
     throw new HttpException(err, statusCode ?? 501)
   }
@@ -34,18 +30,9 @@ export class HelperUtil {
     }
   }
 
-  // public __(msg: keyof LangModel, args?: any) {
-  //   let newMsg: string = lang[lang]
-
-  //   if (this.isObject(args)) {
-  //     Object.keys(args).forEach((arg: string) => {
-  //       newMsg = newMsg.replace(':' + arg, args[arg])
-  //     })
-  //     return newMsg
-  //   }
-
-  //   return newMsg
-  // }
+  public isObj(check: any) {
+    return typeof check === 'object' && !Array.isArray(check) && check !== null
+  }
 
   public isStrToObj(check: string) {
     try {

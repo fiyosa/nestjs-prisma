@@ -1,26 +1,26 @@
-import { ZodType, z } from 'zod'
+import { ZodType, zod } from '../../config/zod'
 
 export class ContactValidation {
-  public static readonly CREATE: ZodType = z.object({
-    user_id: z.string().min(10),
-    first_name: z.string().min(1).max(100),
-    last_name: z.string().min(1).max(100).optional(),
-    email: z.string().min(1).max(100).email().optional(),
-    phone: z.string().min(1).max(20).optional(),
+  public static readonly CREATE: ZodType = zod.object({
+    user_id: zod.string().min(10),
+    first_name: zod.string().min(1).max(100),
+    last_name: zod.string().min(1).max(100).optional(),
+    email: zod.string().min(1).max(100).email().optional(),
+    phone: zod.string().min(1).max(20).optional(),
   })
 
-  public static readonly UPDATE: ZodType = z.object({
-    first_name: z.string().min(1).max(100),
-    last_name: z.string().min(1).max(100).optional(),
-    email: z.string().min(1).max(100).email().optional(),
-    phone: z.string().min(1).max(20).optional(),
+  public static readonly UPDATE: ZodType = zod.object({
+    first_name: zod.string().min(1).max(100),
+    last_name: zod.string().min(1).max(100).optional(),
+    email: zod.string().min(1).max(100).email().optional(),
+    phone: zod.string().min(1).max(20).optional(),
   })
 
-  public static readonly SEARCH: ZodType = z.object({
-    name: z.string().min(1).max(100).optional(),
-    email: z.string().min(1).max(100).optional(),
-    phone: z.string().min(1).max(100).optional(),
-    page: z.number().min(1).positive(),
-    limit: z.number().min(1).max(100).positive(),
+  public static readonly SEARCH: ZodType = zod.object({
+    name: zod.string().min(1).max(100).optional(),
+    email: zod.string().min(1).max(100).optional(),
+    phone: zod.string().min(1).max(100).optional(),
+    page: zod.number().min(1).positive(),
+    limit: zod.number().min(1).max(100).positive(),
   })
 }

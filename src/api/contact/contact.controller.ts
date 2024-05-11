@@ -6,9 +6,11 @@ import { ContactCreateReqModel, ContactCreateResModel } from '../../models/conta
 import { User } from '@prisma/client'
 import { ContactUpdateReqModel, ContactUpdateResModel } from '../../models/contact/contact.update.model'
 import { ContactSearchQueryModel, ContactSearchResModel } from '../../models/contact/contact.search.model'
+import { __ } from '../../lang/lang'
 
 @Controller('/contact')
 export class ContactController {
+  private __
   constructor(private readonly contactService: ContactService) {}
 
   @Get('/:contact_id')
@@ -18,14 +20,14 @@ export class ContactController {
     @ParamID('contact_id', ParseIntPipe) contact_id: number
   ): Promise<WebResModel<ContactCreateResModel>> {
     const result = await this.contactService.show(contact_id)
-    return { data: result, message: 'Contact retrieved successfully' }
+    return { data: result, message: __('retrieved_successfully', { operator: __('contact') }) }
   }
 
   @Post('/')
   @HttpCode(200)
   async create(@Auth() user: User, @Body() req: ContactCreateReqModel): Promise<WebResModel<ContactCreateResModel>> {
     const result = await this.contactService.create(req)
-    return { data: result, message: 'Contact saved successfully' }
+    return { data: result, message: __('saved_successfully', { operator: __('contact') }) }
   }
 
   @Put('/:contact_id')
@@ -36,7 +38,7 @@ export class ContactController {
     @Body() req: ContactUpdateReqModel
   ): Promise<WebResModel<ContactUpdateResModel>> {
     const result = await this.contactService.update(contact_id, req)
-    return { data: result, message: 'Contact updated successfully' }
+    return { data: result, message: __('updated_successfully', { operator: __('contact') }) }
   }
 
   @Delete('/:contact_id')
@@ -63,7 +65,7 @@ export class ContactController {
     return {
       data: result.data,
       pagination: result.pagination,
-      message: 'Contact retrieved successfully',
+      message: __('retrieved_successfully', { operator: __('contact') }),
     }
   }
 }

@@ -5,7 +5,6 @@ import { AppModule } from '../../src/app.module'
 import { TestModule } from '../test.module'
 import { TestService } from '../test.service'
 import { User } from '@prisma/client'
-import { LoggerUtil } from '../../src/utils/logger.util'
 import { HashUtil } from '../../src/utils/hash.util'
 
 describe('User Controller', () => {
@@ -13,7 +12,6 @@ describe('User Controller', () => {
   let testService: TestService
   let user: User
   let hashids: HashUtil
-  let logger: LoggerUtil
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -25,12 +23,9 @@ describe('User Controller', () => {
 
     hashids = await app.get(HashUtil)
     testService = app.get(TestService)
-    logger = app.get(LoggerUtil)
 
     await testService.deleteUser()
     user = await testService.createUser()
-
-    logger.info('Test User Controller')
   })
 
   describe('PUT /user/:id', () => {
@@ -78,7 +73,7 @@ describe('User Controller', () => {
       })
 
       expect(resLogin.status).toBe(200)
-      expect(resLogin.body.data.token).toBeDefined()
+      expect(resLogin.body.token).toBeDefined()
     })
   })
 })

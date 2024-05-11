@@ -32,9 +32,11 @@ export class ErrorUtil implements ExceptionFilter {
     if (this.dbError(err, res)) return
 
     if (err instanceof ZodError) {
-      res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ errors: err.issues, message: err.issues[0]?.path[0] + ': ' + err.issues[0].message })
+      const path = err.issues[0]?.path[0]
+      res.status(HttpStatus.BAD_REQUEST).json({
+        errors: err.issues,
+        message: (path && path + ': ') + err.issues[0].message,
+      })
       return
     }
 

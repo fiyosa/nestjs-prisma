@@ -4,6 +4,7 @@ import { Auth, ParamID } from '../../config/middleware'
 import { User } from '@prisma/client'
 import { UserUpdateReqModel, UserUpdateResModel } from '../../models/user/user.update.model'
 import { WebResModel } from '../../models/web.model'
+import { __ } from '../../lang/lang'
 
 @Controller('/user')
 export class UserController {
@@ -19,6 +20,7 @@ export class UserController {
     const result = await this.userService.update(user, user_id, req)
     return {
       data: result,
+      message: __('retrieved_successfully', { operator: __('user') }),
     }
   }
 }
