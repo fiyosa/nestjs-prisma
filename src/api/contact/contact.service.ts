@@ -9,8 +9,8 @@ import { ContactValidation } from './contact.validation'
 import { ContactShowResModel } from '../../models/contact/contact.show.model'
 import { ContactUpdateReqModel, ContactUpdateResModel } from '../../models/contact/contact.update.model'
 import { User } from '@prisma/client'
-import { ContactSearchQueryModel, ContactSearchResModel } from '../../models/contact/contact.search.model'
 import { WebResModel } from '../../models/web.model'
+import { ContactIndexQueryModel, ContactIndexResModel } from '../../models/contact/contact.index.model'
 
 @Injectable()
 export class ContactService {
@@ -22,9 +22,9 @@ export class ContactService {
     private readonly hash: HashUtil
   ) {}
 
-  async index(user: User, req: ContactSearchQueryModel): Promise<WebResModel<ContactSearchResModel[]>> {
+  async index(user: User, req: ContactIndexQueryModel): Promise<WebResModel<ContactIndexResModel[]>> {
     try {
-      const validated: ContactSearchQueryModel = this.validation.validate(ContactValidation.SEARCH, req)
+      const validated: ContactIndexQueryModel = this.validation.validate(ContactValidation.SEARCH, req)
       const filters = []
 
       if (validated.name) {
@@ -59,12 +59,7 @@ export class ContactService {
       })
 
       return {
-        data: contacts.map((contact) =>
-          this.helper.modelToResponse(ContactSearchResModel, {
-            ...contact,
-            id: this.hash.encode(contact.id.toString()),
-          })
-        ),
+        data: contacts.map((contact) => this.helper.modelToResponse(ContactIndexResModel, contact)),
         pagination: {
           page: validated.page,
           limit: validated.limit,
@@ -80,10 +75,7 @@ export class ContactService {
     try {
       const contact = await this.db.contact.findFirst({ where: { id: contact_id } })
       if (!contact) this.helper.exception('Contact is not found', HttpStatus.BAD_REQUEST)
-      return this.helper.modelToResponse(ContactShowResModel, {
-        ...contact,
-        id: this.hash.encode(contact.id.toString()),
-      })
+      return this.helper.modelToResponse(ContactShowResModel, contact)
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -97,10 +89,7 @@ export class ContactService {
         data: { ...validated, user_id: parseInt(this.hash.decode(validated.user_id)) },
       })
 
-      const result = this.helper.modelToResponse(ContactCreateResModel, {
-        ...contact,
-        id: this.hash.encode(contact.id.toString()),
-      })
+      const result = this.helper.modelToResponse(ContactCreateResModel, contact)
 
       return result
     } catch (err) {
@@ -122,16 +111,13 @@ export class ContactService {
 
       const newContact = await this.db.contact.update({ where: { id: contact_id }, data: contact })
 
-      return this.helper.modelToResponse(ContactUpdateResModel, {
-        ...newContact,
-        id: this.hash.encode(newContact.id.toString()),
-      })
+      return this.helper.modelToResponse(ContactUpdateResModel, newContact)
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
-  async remove(contact_id: number) {
+  async delete(contact_id: number) {
     try {
       const contact = await this.db.contact.findFirst({ where: { id: contact_id } })
       if (!contact) this.helper.exception('Contact is not found', HttpStatus.BAD_REQUEST)

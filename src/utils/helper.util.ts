@@ -1,9 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { HashUtil } from './hash.util'
 
 @Injectable()
 export class HelperUtil {
+  constructor(private readonly hash: HashUtil) {}
+
   public exception(err: any, statusCode?: HttpStatus) {
-    throw new HttpException(err, statusCode ?? 501)
+    throw new HttpException(err, statusCode ?? 500)
   }
 
   public modelToResponse<T>(model: new () => T, data: any): T {
@@ -12,15 +15,12 @@ export class HelperUtil {
       Object.keys(result).forEach((property) => {
         if (data.hasOwnProperty(property)) {
           if (data[property]) {
-            result[property] = data[property]
+            if (property === 'id') result[property] = this.hash.encode(data[property].toString()) || data[property]
+            else result[property] = data[property]
           } else {
-            if (typeof result[property] === 'string') {
-              result[property] = ''
-            } else if (typeof result[property] === 'number') {
-              result[property] = 0
-            } else {
-              result[property] = null
-            }
+            if (typeof result[property] === 'string') result[property] = ''
+            else if (typeof result[property] === 'number') result[property] = 0
+            else result[property] = null
           }
         }
       })

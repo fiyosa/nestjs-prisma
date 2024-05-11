@@ -12,15 +12,27 @@ export class HashUtil {
   }
 
   create(data: string): string {
-    return bycrypt.hashSync(data, 10)
+    try {
+      return bycrypt.hashSync(data, 10)
+    } catch (err) {
+      return ''
+    }
   }
 
   verify(check: string, encrypted: string): boolean {
-    return bycrypt.compareSync(check, encrypted)
+    try {
+      return bycrypt.compareSync(check, encrypted)
+    } catch (err) {
+      return false
+    }
   }
 
   encode(data: string | number): string {
-    return this.hashids.encode(data.toString())
+    try {
+      return this.hashids.encode(data.toString())
+    } catch (err) {
+      return ''
+    }
   }
 
   decode(data: string): string {

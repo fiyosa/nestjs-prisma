@@ -7,7 +7,7 @@ export const id: ILang = {
 
   retrieved_successfully: ':operator berhasil diambil',
   saved_successfully: ':operator berhasil disimpan',
-  updated_successfully: ':operator berhasil diuabh',
+  updated_successfully: ':operator berhasil diubah',
   deleted_successfully: ':operator berhasil dihapus',
 
   unauthorized: 'Unauthorized',

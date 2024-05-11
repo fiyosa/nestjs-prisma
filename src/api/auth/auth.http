@@ -3,12 +3,8 @@
 ###
 
 GET  {{HOST}}/auth/hash
-Content-Type: application/json
-
-{
-  "data": "136",
-  "check": "1"
-}
+     ?data=1
+     &check=
 
 ###
 

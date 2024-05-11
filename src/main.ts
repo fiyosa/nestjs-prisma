@@ -8,9 +8,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService)
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('NestJS Prisma')
+    .setDescription('Documentation structure folder NestJS with ORM Prisma')
     .setVersion('1.0')
+    .addServer('http://localhost:4000/api', 'Local environment')
+    .addBearerAuth()
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('/swagger', app, document, {

@@ -1,21 +1,24 @@
-import { Body, Controller, Delete, Get, HttpCode, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Post, Query } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { WebResModel } from '../../models/web.model'
-import { LoginReqModel, LoginResModel } from '../../models/auth/login.model'
-import { RegisterReqModel, RegisterResModel } from '../../models/auth/register.model'
-import { UserResModel } from '../../models/auth/user.model'
+import { ApiLogin, LoginReqModel, LoginResModel } from '../../models/auth/login.model'
+import { ApiRegister, RegisterReqModel, RegisterResModel } from '../../models/auth/register.model'
+import { ApiUser, UserResModel } from '../../models/auth/user.model'
 import { User } from '@prisma/client'
 import { Auth } from '../../config/middleware'
-import { LogoutResModel } from '../../models/auth/logout.model'
-import { secret } from '../../config/secret'
+import { ApiLogout, LogoutResModel } from '../../models/auth/logout.model'
 import { __ } from '../../lang/lang'
+import { ApiTags } from '@nestjs/swagger'
+import { ApiCrypto } from '../../models/auth/crypto.model'
 
+@ApiTags('Auth')
 @Controller('/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/register')
   @HttpCode(200)
+  @ApiRegister()
   async register(@Body() req: RegisterReqModel): Promise<WebResModel<RegisterResModel>> {
     const result = await this.authService.register(req)
     return { data: result, message: __('saved_successfully', { operator: __('user') }) }
@@ -23,20 +26,21 @@ export class AuthController {
 
   @Post('/login')
   @HttpCode(200)
+  @ApiLogin()
   async login(@Body() req: LoginReqModel): Promise<LoginResModel> {
-    const result = await this.authService.login(req)
-    return result
+    return await this.authService.login(req)
   }
 
   @Delete('/logout')
   @HttpCode(200)
+  @ApiLogout()
   async logout(@Auth() user: User): Promise<WebResModel<LogoutResModel>> {
-    const result = await this.authService.logout(user)
-    return { message: result.message }
+    return await this.authService.logout(user)
   }
 
   @Get('/user')
   @HttpCode(200)
+  @ApiUser()
   async show(@Auth() user: User): Promise<WebResModel<UserResModel>> {
     const result = await this.authService.user(user)
     return { data: result, message: __('retrieved_successfully', { operator: __('user') }) }
@@ -44,9 +48,9 @@ export class AuthController {
 
   @Get('/hash')
   @HttpCode(200)
-  async crypto(@Body() req: { data: string; check: string }): Promise<WebResModel<any>> {
-    await this.authService.crypto(req.data, req.check)
-    // return { data: result, message: __('retrieved_successfully', { operator: 'Hash' }) }
-    return { data: secret, message: __('retrieved_successfully', { operator: 'Hash' }) }
+  @ApiCrypto()
+  crypto(@Query() req: { data: string; check: string }): WebResModel<any> {
+    const result = this.authService.crypto(req.data, req.check)
+    return { data: result, message: __('retrieved_successfully', { operator: 'Hash' }) }
   }
 }

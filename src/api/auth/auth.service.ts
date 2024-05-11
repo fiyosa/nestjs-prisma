@@ -41,10 +41,7 @@ export class AuthService {
         data: validated,
       })
 
-      return {
-        username: user.username,
-        name: user.name,
-      }
+      return this.helper.modelToResponse(RegisterResModel, user)
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -95,14 +92,10 @@ export class AuthService {
   }
 
   async user(user: User): Promise<UserResModel> {
-    return {
-      id: this.hash.encode(user.id.toString()),
-      username: user.username,
-      name: user.name,
-    }
+    return this.helper.modelToResponse(UserResModel, user)
   }
 
-  async crypto(data: string, check: string) {
+  crypto(data: string, check: string) {
     return {
       raw_data: data,
       bcrypt: this.hash.create(data),

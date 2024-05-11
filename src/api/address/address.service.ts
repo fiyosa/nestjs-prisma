@@ -24,12 +24,7 @@ export class AddressSerive {
     try {
       const contact_id = parseInt(this.hash.decode(query.contact_id))
       const addresses = await this.db.address.findMany({ where: { contact_id: contact_id } })
-      return addresses.map((address) =>
-        this.helper.modelToResponse(AddressShowResModel, {
-          ...address,
-          id: this.hash.encode(address.id.toString()),
-        })
-      )
+      return addresses.map((address) => this.helper.modelToResponse(AddressShowResModel, address))
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -46,10 +41,7 @@ export class AddressSerive {
       const address = await this.db.address.create({
         data: { ...validated, contact_id: contact_id },
       })
-      return this.helper.modelToResponse(AddressCreateResModel, {
-        ...address,
-        id: this.hash.encode(address.id.toString()),
-      })
+      return this.helper.modelToResponse(AddressCreateResModel, address)
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -59,10 +51,7 @@ export class AddressSerive {
     try {
       const address = await this.db.address.findFirst({ where: { id: address_id } })
       if (!address) this.helper.exception('Address is not found', 404)
-      return this.helper.modelToResponse(AddressShowResModel, {
-        ...address,
-        id: this.hash.encode(address.id.toString()),
-      })
+      return this.helper.modelToResponse(AddressShowResModel, address)
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -76,10 +65,7 @@ export class AddressSerive {
         data: validated,
       })
       if (!address) this.helper.exception('Address is not found', HttpStatus.BAD_REQUEST)
-      return this.helper.modelToResponse(AddressUpdateResModel, {
-        ...address,
-        id: this.hash.encode(address.id.toString()),
-      })
+      return this.helper.modelToResponse(AddressUpdateResModel, address)
     } catch (err) {
       this.helper.exception(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
