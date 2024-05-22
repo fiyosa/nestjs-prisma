@@ -31,7 +31,7 @@
 ```bash
 $ yarn install
 $ yarn add @prisma/client zod nest-winston winston bcrypt uuid @nestjs/config @nestjs/swagger hashids
-$ yarn add -D prisma @types/bcrypt @types/uuid
+$ yarn add -D prisma @types/bcrypt @types/uuid @types/multer @types/multer
 ```
 
 ## Running the app

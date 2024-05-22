@@ -48,3 +48,27 @@ GET {{HOST}}/auth/user
 Authorization: Bearer test
 
 ###
+
+POST {{HOST}}/auth/upload
+Content-Type: multipart/form-data; boundary=Boundary
+
+--Boundary
+Content-Disposition: form-data; name="file"; filename="kucing-rumahan-unsplash-768x512.jpeg"
+Content-Type: image/jpeg
+
+< C:/Users/fys/Downloads/kucing-rumahan-unsplash-768x512.jpeg
+--Boundary--
+
+###
+# without value
+POST {{HOST}}/auth/upload
+Content-Type: multipart/form-data; boundary=Boundary
+
+--Boundary
+Content-Disposition: form-data; name="file"; filename=""
+Content-Type: application/octet-stream
+
+<
+--Boundary--
+
+###

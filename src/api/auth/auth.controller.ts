@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, Post, Query } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpException,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { WebResModel } from '../../models/web.model'
 import { ApiLogin, LoginReqModel, LoginResModel } from '../../models/auth/login.model'
@@ -10,6 +21,8 @@ import { ApiLogout, LogoutResModel } from '../../models/auth/logout.model'
 import { __ } from '../../lang/lang'
 import { ApiTags } from '@nestjs/swagger'
 import { ApiCrypto } from '../../models/auth/crypto.model'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiUpload } from '../../models/auth/upload.model'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -52,5 +65,20 @@ export class AuthController {
   crypto(@Query() req: { data: string; check: string }): WebResModel<any> {
     const result = this.authService.crypto(req.data, req.check)
     return { data: result, message: __('retrieved_successfully', { operator: 'Hash' }) }
+  }
+
+  @Post('/upload')
+  @HttpCode(200)
+  @ApiUpload()
+  @UseInterceptors(FileInterceptor('file'))
+  async upload(@UploadedFile() file: Express.Multer.File): Promise<any> {
+    if (!file) throw new HttpException('File is required', 400)
+    return {
+      fieldname: file.fieldname,
+      originalname: file.originalname,
+      encoding: file.encoding,
+      mimetype: file.mimetype,
+      size: file.size,
+    }
   }
 }
