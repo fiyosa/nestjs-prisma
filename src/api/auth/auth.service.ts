@@ -11,6 +11,8 @@ import { UserResModel } from '../../models/auth/user.model'
 import { User } from '@prisma/client'
 import { HashUtil } from '../../utils/hash.util'
 import { LogoutResModel } from '../../models/auth/logout.model'
+import { VerifyCaptchaReqModel } from '../../models/auth/verify.captcha.model'
+import svgCaptcha from 'svg-captcha'
 
 @Injectable()
 export class AuthService {
@@ -103,5 +105,24 @@ export class AuthService {
       encode: this.hash.encode(data),
       decode: this.hash.decode(data),
     }
+  }
+
+  async getCaptcha() {
+    const captcha = svgCaptcha.create({
+      size: 5, // Number of characters in the CAPTCHA
+      noise: 2, // Amount of noise/lines in the image
+      color: true, // Enable color in the CAPTCHA
+      ignoreChars: '0O1Il5S2Z6G8B9Qt', // filter out some characters like 0o1i
+      background: '#ccffcc', // Background color of the CAPTCHA
+    })
+
+    return {
+      svg: captcha.data,
+      hash: this.hash.create(captcha.text),
+    }
+  }
+
+  verifyCaptcha(req: VerifyCaptchaReqModel) {
+    return this.hash.verify(req.token, req.hash)
   }
 }

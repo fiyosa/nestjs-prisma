@@ -23,6 +23,8 @@ import { ApiTags } from '@nestjs/swagger'
 import { ApiCrypto } from '../../models/auth/crypto.model'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ApiUpload } from '../../models/auth/upload.model'
+import { ApiGetCaptcha } from '../../models/auth/get.captcha.model'
+import { ApiVerifyCaptcha, VerifyCaptchaReqModel } from '../../models/auth/verify.captcha.model'
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -80,5 +82,21 @@ export class AuthController {
       mimetype: file.mimetype,
       size: file.size,
     }
+  }
+
+  @Get('/get-captcha')
+  @HttpCode(200)
+  @ApiGetCaptcha()
+  async getCaptcha(): Promise<WebResModel<any>> {
+    const result = await this.authService.getCaptcha()
+    return { data: result, message: __('retrieved_successfully', { operator: 'Captcha' }) }
+  }
+
+  @Post('/verify-captcha')
+  @HttpCode(200)
+  @ApiVerifyCaptcha()
+  verifyCaptcha(@Body() req: VerifyCaptchaReqModel): WebResModel<any> {
+    const result = this.authService.verifyCaptcha(req)
+    return { data: result, message: __('retrieved_successfully', { operator: 'Captcha' }) }
   }
 }
